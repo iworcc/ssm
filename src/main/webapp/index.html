@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h4>异步ajax模拟表单提交下载Excel，实现页面无刷新</h4>
+	<input type="button" value="下载" onclick="down()" />
+	<h4>异步ajax模拟表单提交上传Excel，实现页面无刷新</h4>
+	<input type="file" name="fileName" id="fileName"
+		onchange="importExcel()" style="display: none" />
+	<input type="button" onclick="fileClick()" value="点击导入" />
+</body>
+<script type="text/javascript">
+	function importExcel(){
+		
+		var formData=new FormData();
+		formData.append('file',document.getElementById("fileName").files[0]);
+		//创建ajax对象
+		var ajax = null;
+		if (window.XMLHttpRequest) {
+			ajax = new XMLHttpRequest();
+		} else {
+			ajax = new ActiveXObject('Microsoft.XMLHTTP');
+		}
+		//发送POST请求
+		ajax.open("POST","/importExcel",true);
+		ajax.send(formData);
+		ajax.onreadystatechange=function(){
+			if (ajax.readyState === 4 && ajax.status === 200) {
+				alert(ajax.responseText);
+			}
+		} 
+		document.getElementById("fileName").value="";
+	}
+	function fileClick(){
+		document.getElementById("fileName").click();
+	}
+	function down() {
+		//创建对象参数 
+		var searchData = {
+			/* beginTime : beginTime,
+			nowTime : nowTime,
+			snNo : snNo,
+			merchantName : merchantName,
+			orderState : orderState,
+			tradeState : tradeState,
+			settleState : settleState */
+		};
+		post('/getExcelTemplate', null);
+	}
+	function post(URL, PARAMS) {
+		var temp = document.createElement("form");
+		temp.action = URL;
+		temp.method = "post";
+		temp.style.display = "none";
+		for ( var x in PARAMS) {
+			var opt = document.createElement("textarea");
+			opt.name = x;
+			opt.value = PARAMS[x];
+			temp.appendChild(opt);
+		}
+		document.body.appendChild(temp);
+		temp.submit();
+	}
+</script>
+</html>
