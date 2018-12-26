@@ -25,6 +25,7 @@ public class SensitiveWordInit {
     @PostConstruct
     public void init() {
         sensitiveWordInit = this;
+        sensitiveWordInit.sensitiveWordService = this.sensitiveWordService;
     }
 
     public SensitiveWordInit(){

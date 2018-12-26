@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.ioms.ssm.entity.SensitiveWord;
 import cn.ioms.ssm.service.SensitiveWordService;
-import cn.ioms.ssm.util.SensitivewordFilterUtil;
+import cn.ioms.ssm.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSON;
 
 import cn.ioms.ssm.service.TestService;
-import cn.ioms.ssm.util.Entity;
-import cn.ioms.ssm.util.ExcelTemplate;
-import cn.ioms.ssm.util.ExcelUtil;
 
 /**
  * @RestController注解相当于@ResponseBody ＋ @Controller合在一起的作用。
@@ -96,45 +93,33 @@ public class TestController {
     @RequestMapping(value="importExcel")
     @ResponseBody
     public String importExcel(MultipartFile file) {
-    	List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-    	Map<String, Object> map = null;
+    	List<Map> list = new ArrayList<Map>();
     	try {
             InputStream is = file.getInputStream();
-            String[] listStr = ExcelUtil.readExcelTitle(is);
-            
-            List<String[]> list = ExcelUtil.readExcelContent(is,1);
-            String[] str = null;
-            for (int i = 0; i < list.size(); i++) {
-            	str = list.get(i);
-            	map = new HashMap<String, Object>();
-            	map.put("name", str[0]);
-            	map.put("sex", str[1]);
-            	map.put("IDType", str[2]);
-            	map.put("ID", str[3]);
-            	map.put("endDate", str[4]);
-            	map.put("address", str[5]);
-            	map.put("race", str[6]);
-            	map.put("createDate", str[7]);
-            	listMap.add(map);
-            }
+            list = ExcelUtil.readExcelContent(is,1,Entity.USERINFO_EXCEL_HANDERS);
+
         } catch ( IOException e) {
             e.printStackTrace();
         }
-    	return JSON.toJSONString(listMap);
+    	return JSON.toJSONString(list);
     }
 
     @RequestMapping(value = "/query" ,method = RequestMethod.GET)
 	@ResponseBody
-    public String queryAll(){
+    public String queryAll()throws Exception{
 //		SensitivewordFilterUtil sensitiveWord = new SensitivewordFilterUtil();
-		String txt = "太多的伤感情怀也许只局限于饲养基地 荧幕中的情节，主人公尝试着去用某种方式渐渐的很潇洒地释自杀指南怀那些自己经历的伤感。\"\n" +
-				"                + \"然后法轮功 我们的扮演的角色就是跟随着主人公的喜红客联盟 怒哀乐而过于牵强的把自己的情感也附加于银幕情节中，然后感动就流泪，\"\n" +
-				"                + \"难过就躺在某一个人的怀里尽情的阐述心扉或者手机卡复制器一个人一杯红酒一部电影在夜三级片 深人静的晚上，关上电话静静的发呆着。黄色电影";
-		Set<String> sets = SensitivewordFilterUtil.getSensitiveWord(txt,2);
-		String strs = "";
-		for (String str:sets) {
-			strs += str;
-		}
-    	return strs+""+new Date();
+//		String txt = "太多的伤感情怀也许只局限于饲养基地 荧幕中的情节，主人公尝试着去用某种方式渐渐的很潇洒地释自杀指南怀那些自己经历的伤感。\"\n" +
+//				"                + \"然后法轮功 我们的扮演的角色就是跟随着主人公的喜红客联盟 怒哀乐而过于牵强的把自己的情感也附加于银幕情节中，然后感动就流泪，\"\n" +
+//				"                + \"难过就躺在某一个人的怀里尽情的阐述心扉或者手机卡复制器一个人一杯红酒一部电影在夜三级片 深人静的晚上，关上电话静静的发呆着。黄色电影";
+//		Set<String> sets = SensitivewordFilterUtil.getSensitiveWord(txt,2);
+//		String strs = "";
+//		for (String str:sets) {
+//			strs += str;
+//		}
+//    	return strs+""+new Date();
+		System.out.println("AvA35j__gxOSxFQD5F0P7XIjx9j1zuKSTCwPDJafAx_q".length());
+		System.out.println("44db45ae4538c195f735ca964ac9ce0336dd2a9d040f9959ce74dc7111183fb6".length());
+		PushUtil.push("07e3aa19c6903700f3001b4e701f8c8081adb92b48d01cc909865238cde7b5ad","test","contnet",null);
+		return "";
 	}
 }
